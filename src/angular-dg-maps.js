@@ -82,6 +82,16 @@
                     $log.error("angular-dg-maps: error while removing marker - marker not found");
                 };
 
+                /**
+                 * Hide all balloons on map
+                 * @param {}
+                 */
+                this.hideAllBalloons = function () {
+                    if ($scope.map) {
+                        $scope.map.balloons.getDefaultGroup().hide();
+                    }
+                }
+
             }],
 
             compile: function (tElem) {
@@ -256,12 +266,13 @@
                     balloon.setHeaderContent(scope.contentHeader);
                 }
 
-//                dgMapCtrl.addBalloon(balloon);
+                dgMapCtrl.addBalloon(balloon);
 
                 var markerConfig = {
                     geoPoint: new DG.GeoPoint(scope.lon, scope.lat),
                     clickCallback: function () {
-//                        balloon.show();
+                        dgMapCtrl.hideAllBalloons();
+                        balloon.show();
                     }
                 };
 
@@ -319,6 +330,8 @@
                 element.bind('$destroy', function () {
                     dgMapCtrl.removeMarker(marker);
                 });
+
+                dgMapCtrl.hideAllBalloons();
             }
         };
     }]);
